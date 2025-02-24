@@ -76,7 +76,7 @@ router.get('/:id', async (req, res) => {
 // The validate() method is now used directly on the schema object, rather than being called as a static method on Joi.
 function validateGenre(genre) {
     const schema = Joi.object({
-      name: Joi.string().min(3).required(),
+      name: Joi.string().min(3).max(50).required(),
     });
   
     return schema.validate(genre); 

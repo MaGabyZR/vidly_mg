@@ -1,28 +1,7 @@
+const {Customer, validate} = require('../models/customer');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
-const Joi = require('joi'); //load de joi module, for input validation, it returns a class.
-
-//Create a model and Define the schema for the customers.
-const Customer = mongoose.model('Customer', new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 50
-  },
-    isGold: {
-        type: Boolean,
-        default: false
-  },
-    phone: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 50
-  } 
-
-}));
 
 //Define a route and return all the customers in the db.
 router.get('/', async(req, res) => {
@@ -33,7 +12,7 @@ router.get('/', async(req, res) => {
 
   //Define a post request and its path, and create a new customer object and push it on the array.
 router.post('/', async (req, res) => {
-    const { error } = validateCustomer(req.body); 
+    const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
   
     //Change the object to a the new model, delete the id, as it managed by Mongo. Save the new object to the db.
@@ -51,7 +30,7 @@ router.post('/', async (req, res) => {
 // Validate it or return 400 and if valid update it and return it.
 //Use the update first approach, to update documents in Mongo. 
 router.put('/:id', async (req, res) => {
-    const { error } = validateCustomer(req.body); 
+    const { error } = validate(req.body); 
       if (error) return res.status(400).send(error.details[0].message);
   
     const customer = await Customer.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
@@ -79,17 +58,5 @@ router.get('/:id', async (req, res) => {
       
       res.send(customer);
     });
-
-//Function to reuse validation.This is the new updated code for Joi v16.
-// The validate() method is now used directly on the schema object, rather than being called as a static method on Joi.
-function validateCustomer(customer) {
-    const schema = Joi.object({
-      name: Joi.string().min(5).max(50).required(),
-      phone: Joi.string().min(5).max(50).required(),
-      isGold: Joi.boolean()
-    });
-  
-    return schema.validate(customer); 
-  }
 
   module.exports = router; 

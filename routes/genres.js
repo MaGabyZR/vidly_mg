@@ -1,17 +1,7 @@
+const {Genre, validate} = require('../models/genre');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
-const Joi = require('joi'); //load de joi module, for input validation, it returns a class.
-
-//Create a model and Define the schema for the genres.
-const Genre = mongoose.model('Genre', new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 50
-  }
-}));
 
 //Define a route and return all the genres in the db.
 router.get('/', async(req, res) => {
@@ -21,7 +11,7 @@ router.get('/', async(req, res) => {
 
 //Define a post request and its path, and create a new course object and push it on the array.
 router.post('/', async (req, res) => {
-    const { error } = validateGenre(req.body); 
+    const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
   
     //Change the object to a the new model, delete the id, as it managed by Mongo. Save the new object to the db.
@@ -35,7 +25,7 @@ router.post('/', async (req, res) => {
 // Validate it or return 400 and if valid update it and return it.
 //Use the update first approach, to update documents in Mongo. 
 router.put('/:id', async (req, res) => {
-  const { error } = validateGenre(req.body); 
+  const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 
   const genre = await Genre.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
@@ -72,14 +62,4 @@ router.get('/:id', async (req, res) => {
     res.send(genre);
   });
 
-//Function to reuse validation.This is the new updated code for Joi v16.
-// The validate() method is now used directly on the schema object, rather than being called as a static method on Joi.
-function validateGenre(genre) {
-    const schema = Joi.object({
-      name: Joi.string().min(3).max(50).required(),
-    });
-  
-    return schema.validate(genre); 
-  }
-
-  module.exports = router; 
+module.exports = router; 

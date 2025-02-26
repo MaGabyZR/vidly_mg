@@ -1,5 +1,4 @@
 const {Genre, validate} = require('../models/genre');
-const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
 

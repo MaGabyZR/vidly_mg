@@ -1,8 +1,10 @@
 const {Rental, validate} = require('../models/rental');
 const {Movie} = require('../models/movie');
 const{Customer} = require('../models/customer');
+const mongoose = require('mongoose');
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
+
 
 //Define a route and return all the rentals in the db.
 router.get('/', async(req, res) => {
@@ -39,14 +41,15 @@ router.post('/', async (req, res) => {
         dailyRentalRate: movie.dailyRentalRate
       }
     }); 
-    rental = await rental.save();
 
+    rental = await rental.save();
     //update the numberInStock and save it.
     movie.numberInStock--;
     movie.save();
     
     res.send(rental);
-  });
+  
+});
 
 //GET Request. To GET a specific rental, use a route parameter and in this case we use id as the parameter. Use the findById approach.
 //And return a 404 error if the rental is not found.

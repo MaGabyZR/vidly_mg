@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const {User, validate} = require('../models/user');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
@@ -12,15 +13,27 @@ router.post('/', async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send('User already exists!');
 
-    //Save the new user in the database.
+
+ /* //Save the new user in the database.First approach
     user = new User ({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
-    });
-    await user.save();
-    
-    res.send(user);
-  });
+    }); */
 
-  module.exports = router; 
+    //Second approach to save the new user with lodash
+    user = new User(_.pick(req.body, ['name', 'email', 'password']));
+    //save the user
+    await user.save();
+   
+/*  //First approach to limit our response to the user adn return to the client.
+    res.send({
+        name: user.name,
+        email: user.email
+    }); */
+
+    //Second approach using lodash to return the user object to the client.
+   res.send( _.pick(user, ['_id', 'name', 'email']));
+});
+
+  module.exports = router;

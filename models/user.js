@@ -3,7 +3,7 @@ const Joi = require('joi'); //load de joi module, for input validation, it retur
 
 //Create a model and Define the schema for the users, while calling the model method. In this case we do not need to define it as a separate constant.
 const User = mongoose.model('User', new mongoose.Schema({
-    email: {
+    name: {
       type: String,
       required: true,
       minlength: 5,

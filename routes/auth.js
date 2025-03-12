@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const Joi = require ('joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -19,9 +20,10 @@ router.post('/', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send('Invalid email or password!');
 
-    res.send(true);
+    //Create a JWT and pass the payload, the secret or private key (do not hard code it)and return the token to the client.
+    const token = jwt.sign({ _id: user._id }, 'jwtPrivateKey');
+    res.send(token);
 });
-
 
 
 //Function to reuse validation.This is the new updated code for Joi v16.

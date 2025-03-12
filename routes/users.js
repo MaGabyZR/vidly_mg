@@ -37,10 +37,9 @@ router.post('/', async (req, res) => {
         email: user.email
     }); */
 
-    //Generate the jwt.
-    const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
 
-    //Second approach using lodash to return the user object to the client and return the jwt in a header.
+    //Second approach using lodash to return the user object to the client and return the jwt in a header.Call user.js for the token. 
+   const token = user.generateAuthToken();
    res.header('x-auth-token', token).send( _.pick(user, ['_id', 'name', 'email']));
 });
 

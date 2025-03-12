@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User, validate} = require('../models/user');
@@ -12,7 +14,7 @@ router.post('/', async (req, res) => {
 
     //Check if the user is not already registered.
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send('User already exists!');
+    if (user) return res.status(400).send('User already exists!'); 
 
 
  /* //Save the new user in the database.First approach
@@ -35,8 +37,11 @@ router.post('/', async (req, res) => {
         email: user.email
     }); */
 
-    //Second approach using lodash to return the user object to the client.
-   res.send( _.pick(user, ['_id', 'name', 'email']));
+    //Generate the jwt.
+    const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
+
+    //Second approach using lodash to return the user object to the client and return the jwt in a header.
+   res.header('x-auth-token', token).send( _.pick(user, ['_id', 'name', 'email']));
 });
 
   module.exports = router;

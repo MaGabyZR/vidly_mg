@@ -1,3 +1,4 @@
+const config = require('config');
 const jwt = require('jsonwebtoken');
 const Joi = require ('joi');
 const bcrypt = require('bcrypt');
@@ -20,8 +21,8 @@ router.post('/', async (req, res) => {
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).send('Invalid email or password!');
 
-    //Create a JWT and pass the payload, the secret or private key (do not hard code it)and return the token to the client.
-    const token = jwt.sign({ _id: user._id }, 'jwtPrivateKey');
+    //Create a JWT and pass the payload, the secret or private key (do not hard code it) call config and return the token to the client.
+    const token = jwt.sign({ _id: user._id }, config.get('jwtPrivateKey'));
     res.send(token);
 });
 

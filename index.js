@@ -1,3 +1,5 @@
+const config = require('config');
+const Joi = require('joi');
 const mongoose = require('mongoose'); //load mongoose to connect to MongoDB.
 const genres = require('./routes/genres'); //load the genres module.
 const customers = require('./routes/customers'); //load the customers module.
@@ -7,6 +9,12 @@ const users = require('./routes/users');         //load the users module.
 const auth = require('./routes/auth');          //load the auth module.
 const express = require('express'); //load the express module.
 const app = express(); //by default we store the result in a constant called app, to represent our application.
+
+//Verify that the environment variable is set when the app starts. Exit the process in case of an error.
+if (!config.get('jwtPrivateKey')){
+    console.log('FATAL ERROR: jwtPrivateKey is not defined!');
+    process.exit(1); 
+}
 
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/vidly')

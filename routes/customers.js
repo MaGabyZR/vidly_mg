@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const {Customer, validate} = require('../models/customer');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
@@ -10,8 +11,9 @@ router.get('/', async(req, res) => {
     res.send(customers);
   });
 
-  //Define a post request and its path, and create a new customer object and push it on the array.
-router.post('/', async (req, res) => {
+  //Define a post request and its path, and create a new customer.
+  //This API endpoint should only be called by an authenticated user, call auth middleware function.
+router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
   

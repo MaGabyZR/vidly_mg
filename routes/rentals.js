@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const {Rental, validate} = require('../models/rental');
 const {Movie} = require('../models/movie');
 const{Customer} = require('../models/customer');
@@ -13,7 +14,8 @@ router.get('/', async(req, res) => {
   });
 
 //Define a post request and its path, and create a new rental object and push it on the array.
-router.post('/', async (req, res) => {
+//This API endpoint should only be called by an authenticated user, call auth middleware function.
+router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 

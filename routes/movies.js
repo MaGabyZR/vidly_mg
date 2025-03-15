@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const {Movie, validate} = require('../models/movie');
 const {Genre} = require('../models/genre'); 
 const mongoose = require('mongoose'); //load mongoose to connect to MongoDB.
@@ -11,7 +12,8 @@ router.get('/', async(req, res) => {
   });
 
 //Define a post request and its path, and create a new course object and push it on the array, => create a new movie.
-router.post('/', async (req, res) => {
+//This API endpoint should only be called by an authenticated user, call auth middleware function.
+router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
 

@@ -10,15 +10,18 @@ router.get('/', async(req, res) => {
   });
 
 //Define a post request and its path, and create a new course object and push it on the array.
+//This API endpoint should only be called by an authenticated user, reading the request headers.
 router.post('/', async (req, res) => {
-    const { error } = validate(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
+
   
-    //Change the object to a the new model, delete the id, as it managed by Mongo. Save the new object to the db.
-    let genre = new Genre({name: req.body.name });
-    genre = await genre.save();
+  const { error } = validate(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
+  
+  //Change the object to a the new model, delete the id, as it managed by Mongo. Save the new object to the db.
+  let genre = new Genre({name: req.body.name });
+  genre = await genre.save();
     
-    res.send(genre);
+  res.send(genre);
   });
 
 //To update a genre, add a new route handler.1.Look up the genre and if it doesn´t exist return 404. 

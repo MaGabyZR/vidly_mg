@@ -23,11 +23,12 @@ const userSchema = new mongoose.Schema({
       required: true,
       minlength: 5,
       maxlength: 1024
-    }
+    },
+  isAdmin: Boolean
 });
-//Add a method to encapsulate the logic to generate a jwt. 
+//Add a method to encapsulate the logic to generate a jwt. Add the isAdmin property to the payload.
 userSchema.methods.generateAuthToken = function(){
-  const token = jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'));
+  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
   return token;
 }
 

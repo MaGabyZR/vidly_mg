@@ -1,4 +1,5 @@
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const {Genre, validate} = require('../models/genre');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
@@ -40,11 +41,12 @@ router.put('/:id', async (req, res) => {
     //genre.name = req.body.name; ////Replaced in the findbyidandupdate.
     res.send(genre);
   });
-  
-//1.look up the genre, if it doesn´t exist return 404.Than delete it and return the same course.
+ 
+//This API endpoint should only be called by an authenticated and authorized user, call auth middleware function [auth, admin]
+//Look up the genre, if it doesn´t exist return 404.Than delete it and return the same course.
 //Use the findByIdAndRemove method. 
-router.delete('/:id', async (req, res) => {
-  const genre = await Genre.findByIdAndRemove(req.params.id);
+router.delete('/:id', [auth, admin], async (req, res) => {
+  const genre = await Genre.findByIdAndDelete(req.params.id);
     // const genre = genres.find(c => c.id === parseInt(req.params.id)); //you don´t need to look a genre in an array anymore. 
     if (!genre) return res.status(404).send('The genre with the given ID was not found.');
   

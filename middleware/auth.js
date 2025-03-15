@@ -1,3 +1,4 @@
+//Here auth represents authorization, not authentication. 
 const jwt = require('jsonwebtoken');
 const config = require('config');
 

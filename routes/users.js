@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcrypt');
@@ -5,7 +6,14 @@ const _ = require('lodash');
 const {User, validate} = require('../models/user');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
-const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
+const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object.
+
+//Get information about a currently logged user, get it from the JWT.
+//This API endpoint should only be called by an authenticated user, call auth middleware function.
+router.get('/me', auth, async(req, res) => {
+    const user = await User.findById(req.user._id).select('-password');
+    res.send(user);
+})
 
 //Define a post request and its path, and create a new user. 
 router.post('/', async (req, res) => {

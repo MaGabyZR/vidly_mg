@@ -5,11 +5,16 @@ const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
 
-//Define a route and return all the genres in the db.
+//Define a route and return all the genres in the db, and handle a posible error. 
 router.get('/', async(req, res) => {
+  try{
     const genres = await Genre.find().sort('name');
     res.send(genres);
-  });
+  }
+  catch(ex){
+    res.status(500).send('Something went wrong...');
+  }
+});
 
 //Define a post request and its path, and create a new course object and push it on the array.
 //This API endpoint should only be called by an authenticated user, call auth middleware function.

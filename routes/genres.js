@@ -5,14 +5,14 @@ const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const express = require('express'); //load the Express module.
 const router = express.Router(); //to call express in this separate module.Here you work with a router object, instead of an app object. 
 
-//Define a route and return all the genres in the db, and handle a posible error. 
-router.get('/', async(req, res) => {
+//Define a route and return all the genres in the db, and handle a posible error with our error handling middleware function in index.js. 
+router.get('/', async(req, res, next) => {
   try{
     const genres = await Genre.find().sort('name');
     res.send(genres);
   }
   catch(ex){
-    res.status(500).send('Something went wrong...');
+    next(ex);
   }
 });
 

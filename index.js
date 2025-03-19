@@ -1,3 +1,4 @@
+const error = require('./middleware/error');
 const config = require('config');
 const Joi = require('joi');
 const mongoose = require('mongoose'); //load mongoose to connect to MongoDB.
@@ -28,6 +29,7 @@ app.use('/api/movies', movies);         //to use the movies router with Express.
 app.use('/api/rentals', rentals);       //to use the rentals router with Express. 
 app.use('/api/users', users);           //to use the users router with Express. 
 app.use('/api/auth', auth);             //to use the auth router with Express. 
+app.use(error);                         //Handle all the errors in the app, with this error handling middleware function.
 
 //Add an environment variable, so you can listen to the port dinamically. On the terminal set PORT=5000 
 const port = process.env.PORT || 3000;

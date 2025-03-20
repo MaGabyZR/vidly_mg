@@ -1,4 +1,5 @@
 require('express-async-errors');
+const winston = require('winston');
 const error = require('./middleware/error');
 const config = require('config');
 const Joi = require('joi');
@@ -11,6 +12,9 @@ const users = require('./routes/users');         //load the users module.
 const auth = require('./routes/auth');          //load the auth module.
 const express = require('express'); //load the express module.
 const app = express(); //by default we store the result in a constant called app, to represent our application.
+
+//log messages in the file
+winston.add(new winston.transports.File({ filename: 'logfile.log' }));
 
 //Verify that the environment variable is set when the app starts. Exit the process in case of an error.
 if (!config.get('jwtPrivateKey')){

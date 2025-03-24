@@ -14,11 +14,29 @@ const auth = require('./routes/auth');          //load the auth module.
 const express = require('express'); //load the express module.
 const app = express(); //by default we store the result in a constant called app, to represent our application. 
 
-//Catch errors at a Node level.
+/* //Catch errors at a Node level.First approach:
 process.on('uncaughtException', (ex) => {
-    console.log('WE GOT AND UNCAUGHT EXCEPTION!');
     winston.error(ex.message, ex);
-});
+    process.exit(1);
+}); */
+
+//Catch errors at a Node level, with winston. A better approach, as it is not manually done.
+//Second approach:
+winston.exceptions.handle(
+    new winston.transports.File({filename: 'uncaughtExceptions.log'})
+);
+
+/* //Catch unhandled promise rejections. First approach.
+process.on('unhandledRejection', (ex) => {
+    winston.error(ex.message, ex);
+    process.exit(1);
+}); */
+
+//Catch unhandled promise rejections, automated with winston.  
+//Second approach:
+winston.rejections.handle(
+    new winston.transports.File({ filename: 'unhandledRejections.log' })
+);
 
 //log messages in the file and in mongoDB
 winston.add(new winston.transports.File({ filename: 'logfile.log' }));

@@ -7,7 +7,7 @@ const router = express.Router(); //to call express in this separate module.Here 
 
 //Define a route and return all the genres in the db. 
 router.get('/', async (req, res) => {
-    throw new Error('Could not get the genres.');   //simulate an error to try winston. 
+    //throw new Error('Could not get the genres.');   //simulate an error to try winston. 
     const genres = await Genre.find().sort('name');
     res.send(genres);
 });

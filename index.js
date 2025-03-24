@@ -12,7 +12,13 @@ const movies = require('./routes/movies');       //load the movies module.
 const users = require('./routes/users');         //load the users module.
 const auth = require('./routes/auth');          //load the auth module.
 const express = require('express'); //load the express module.
-const app = express(); //by default we store the result in a constant called app, to represent our application.
+const app = express(); //by default we store the result in a constant called app, to represent our application. 
+
+//Catch errors at a Node level.
+process.on('uncaughtException', (ex) => {
+    console.log('WE GOT AND UNCAUGHT EXCEPTION!');
+    winston.error(ex.message, ex);
+});
 
 //log messages in the file and in mongoDB
 winston.add(new winston.transports.File({ filename: 'logfile.log' }));

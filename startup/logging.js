@@ -12,6 +12,7 @@ module.exports = function () {
     //Catch errors at a Node level, with winston. A better approach, as it is not manually done.
     //Second approach:
     winston.exceptions.handle(
+        new winston.transports.Console({ colorize: true, prettyPrint: true }),
         new winston.transports.File({filename: 'uncaughtExceptions.log'})
     );
     

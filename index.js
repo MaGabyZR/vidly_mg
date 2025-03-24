@@ -11,6 +11,6 @@ require('./startup/validation')();              //load the validation module.
 //Add an environment variable, so you can listen to the port dinamically. On the terminal set PORT=5000 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    winston.info(`Listening on port ${port}...`);
+    //winston.info(`Listening on port ${port}...`);
     console.log(`Listening on port ${port}...`); // Fallback in case Winston fails
 });

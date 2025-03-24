@@ -2,7 +2,7 @@ const winston = require('winston');
 require('winston-mongodb');
 require('express-async-errors');
 
-module.exports = function (){
+module.exports = function () {
     /* //Catch errors at a Node level.First approach:
     process.on('uncaughtException', (ex) => {
         winston.error(ex.message, ex);
@@ -29,8 +29,8 @@ module.exports = function (){
     
     //log messages in the file and in mongoDB
     winston.add(new winston.transports.File({ filename: 'logfile.log' }));
-    winston.add(new winston.transports.MongoDB({ 
+    winston.add(new winston.transports.MongoDB, { 
         db: 'mongodb://localhost/vidly',
-        level: 'error'
-     }));   
+        level: 'info'
+     });   
 }

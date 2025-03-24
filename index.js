@@ -1,46 +1,12 @@
-require('express-async-errors');
-const winston = require('winston');
-require('winston-mongodb');
 const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const express = require('express');             //load the express module.
 const app = express();                          //by default we store the result in a constant called app, to represent our application. 
 
+require('./startup/logging');                   //load the logging module first, in case you get an error.
 require('./startup/routes')(app);               //load the routes module and app. 
-require('./startup/db')();
-
-/* //Catch errors at a Node level.First approach:
-process.on('uncaughtException', (ex) => {
-    winston.error(ex.message, ex);
-    process.exit(1);
-}); */
-
-//Catch errors at a Node level, with winston. A better approach, as it is not manually done.
-//Second approach:
-winston.exceptions.handle(
-    new winston.transports.File({filename: 'uncaughtExceptions.log'})
-);
-
-/* //Catch unhandled promise rejections. First approach.
-process.on('unhandledRejection', (ex) => {
-    winston.error(ex.message, ex);
-    process.exit(1);
-}); */
-
-//Catch unhandled promise rejections, automated with winston.  
-//Second approach:
-winston.rejections.handle(
-    new winston.transports.File({ filename: 'unhandledRejections.log' })
-);
-
-//log messages in the file and in mongoDB
-winston.add(new winston.transports.File({ filename: 'logfile.log' }));
-winston.add(new winston.transports.MongoDB({ 
-    db: 'mongodb://localhost/vidly',
-    level: 'error'
- }));
-
+require('./startup/db')();                      //load the DB.
 
 //Verify that the environment variable is set when the app starts. Exit the process in case of an error.
 if (!config.get('jwtPrivateKey')){

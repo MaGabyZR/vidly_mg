@@ -4,11 +4,11 @@ require('winston-mongodb');
 const config = require('config');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
-const mongoose = require('mongoose');           //load mongoose to connect to MongoDB.
 const express = require('express');             //load the express module.
 const app = express();                          //by default we store the result in a constant called app, to represent our application. 
 
-require('./startup/routes')(app);               //load the routes module. 
+require('./startup/routes')(app);               //load the routes module and app. 
+require('./startup/db')();
 
 /* //Catch errors at a Node level.First approach:
 process.on('uncaughtException', (ex) => {
@@ -47,11 +47,6 @@ if (!config.get('jwtPrivateKey')){
     console.log('FATAL ERROR: jwtPrivateKey is not defined!');
     process.exit(1); 
 }
-
-//connect to MongoDB
-mongoose.connect('mongodb://localhost/vidly')
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(() => console.error('Could not connect to MongoDB...'));
 
 //Add an environment variable, so you can listen to the port dinamically. On the terminal set PORT=5000 
 const port = process.env.PORT || 3000;

@@ -2,7 +2,7 @@ const winston = require('winston');
 const express = require('express');             //load the express module.
 const app = express();                          //by default we store the result in a constant called app, to represent our application. 
 
-require('./startup/logging');                   //load the logging module first, in case you get an error.
+require('./startup/logging')();                   //load the logging module first, in case you get an error.
 require('./startup/routes')(app);               //load the routes module and app. 
 require('./startup/db')();                      //load the DB.
 require('./startup/config')();                  //load the config module.

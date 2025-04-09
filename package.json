@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +22,8 @@
     "vidly_mg": "file:",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

@@ -59,6 +59,9 @@ router.delete('/:id', [auth, admin], async (req, res) => {
 //GET Request. To GET a specific genre, use a route parameter and in this case we use id as the parameter. Use the findById approach.
 //And return a 404 error if the course is not find.
 router.get('/:id', async (req, res) => {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.status(404).send('Invalid ID');
+
   const genre = await Genre.findById(req.params.id);
     //const genre = genres.find(c => c.id === parseInt(req.params.id)); //We do not need it, as this is only for working with arrays, not db.
     if (!genre) return res.status(404).send('The genre with the given ID was not found.');

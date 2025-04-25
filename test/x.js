@@ -3,7 +3,7 @@
 // POST /api/returns {customerId, movieId}
 
 //Error scenarios:
-    //Return 401 if client is not logged in.
+    //1. Return 401 if client is not logged in. Testing Authorization. 
     //Return 400 if customerId is not provided.
     //Return 400 if movieId is not provided.
     //Return 404 if no rental is found for this customer or movie.

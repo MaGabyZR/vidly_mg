@@ -1,5 +1,6 @@
 const request = require('supertest');
 const {Rental} = require('../../models/rental');
+const {User} = require('../../models/user'); 
 const mongoose = require('mongoose');
 
 describe('/api/returns', () => {
@@ -34,12 +35,24 @@ describe('/api/returns', () => {
         await Rental.deleteMany({}); 
     });
 
-    //1.
+    //1. TDD 
     it('should return 401 if client is not logged in', async () => {
         const res = await request(server)
             .post('/api/returns')
             .send({ customerId, movieId});
         
         expect(res.status).toBe(401);
+    });
+
+    //2. TDD 
+    it('should return 400 if customerId is not provided.', async () => {
+        const token = new User().generateAuthToken();
+
+        const res = await request(server)
+            .post('/api/returns')
+            .set('x-auth-token', token)
+            .send({ movieId });
+        
+        expect(res.status).toBe(400);
     });
 });

@@ -54,7 +54,8 @@ describe('/api/returns', () => {
 
      afterEach(async () => { 
         await server.close();
-        await Rental.deleteMany({}); 
+        await Rental.deleteMany({});
+        await Movie.deleteMany({}); 
     });
 
     //1. TDD 
@@ -137,4 +138,19 @@ describe('/api/returns', () => {
         const movieInDB = await Movie.findById(movieId);
         expect(movieInDB.numberInStock).toBe(movie.numberInStock + 1);                     
     });
+
+    //10. TDD
+    it('should return the summary of the rental.', async () => {
+        const res = await exec();
+
+        const rentalInDB = await Rental.findById(rental._id);
+        expect(res.body).toHaveProperty('dateOut');
+        expect(res.body).toHaveProperty('dateReturned');
+        expect(res.body).toHaveProperty('rentalFee');
+        expect(res.body).toHaveProperty('customer');
+        expect(res.body).toHaveProperty('movie');
+
+        expect(Object.keys(res.body)).toEqual(
+            expect.arrayContaining(['dateOut', 'dateReturned', 'rentalFee', 'customer', 'movie']));
+    }); 
 });

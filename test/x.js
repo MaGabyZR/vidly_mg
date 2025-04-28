@@ -13,4 +13,4 @@
     //7. Set the return date.
     //8. Calculate the rental fee.
     //9. Increase the stock, when a movie is back.
-    //Finally, return the summary of the rental. 
+    //10. Finally, return the summary of the rental. 

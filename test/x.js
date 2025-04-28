@@ -10,7 +10,7 @@
     //5. Return 400 if the rental has already been processed, the customer already returned the movie.
 //Sucess scenarios:
     //6. Return 200 if it is a valid request.
-    //Set the return date.
+    //7. Set the return date.
     //Calculate the rental fee.
     //Increase the stock, when a movie is back.
     //Finally, return the summary of the rental. 

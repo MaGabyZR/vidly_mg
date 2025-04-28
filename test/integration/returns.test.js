@@ -79,5 +79,16 @@ describe('/api/returns', () => {
         const res = await exec();
 
         expect(res.status).toBe(404);
-    })
+    });
+
+    //5. TDD
+    it('should return 400 if the rental has already been processed, the customer already returned the movie.', async () => {
+        rental.dateReturned = new Date();
+        await rental.save(); 
+
+        const res = await exec();
+
+        expect(res.status).toBe(400);
+    });
+
 });

@@ -10,7 +10,9 @@ router.post('/', async (req, res) => {
         'customer._id': req.body.customerId,
         'movie._id': req.body.movieId
     });
-    if (!rental) return res.status(404).send('No rental is found for this customer or movie.')
+    if (!rental) return res.status(404).send('No rental is found for this customer or movie.');
+
+    if (rental.dateReturned) return res.status(400).send('Rental has already been processed, the customer already returned the movie.');
 
 
     res.status(401).send('Unauthorized');

@@ -1,3 +1,4 @@
+const moment = require('moment');
 const request = require('supertest');
 const {Rental} = require('../../models/rental');
 const {User} = require('../../models/user'); 
@@ -105,6 +106,17 @@ describe('/api/returns', () => {
         const rentalInDB = await Rental.findById(rental._id);
         const difference = new Date() - rentalInDB.dateReturned;
         expect(difference).toBeLessThan(10 * 1000);                         //<10 seconds. 
+    });
+
+    //8. TDD
+    it('should calculate the rental fee.', async () => {
+        rental.dateOut = moment().add(-7, 'days').toDate();     //7days of rental.
+        await rental.save();
+
+        const res = await exec();
+
+        const rentalInDB = await Rental.findById(rental._id);
+        expect(rentalInDB.rentalFee).toBe(14);                  //the movie was rented for 7 days at USD 2 daily = 14    
     });
 
 });

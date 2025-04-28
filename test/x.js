@@ -11,6 +11,6 @@
 //Sucess scenarios:
     //6. Return 200 if it is a valid request.
     //7. Set the return date.
-    //Calculate the rental fee.
+    //8. Calculate the rental fee.
     //Increase the stock, when a movie is back.
     //Finally, return the summary of the rental. 

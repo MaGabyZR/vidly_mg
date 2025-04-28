@@ -12,5 +12,5 @@
     //6. Return 200 if it is a valid request.
     //7. Set the return date.
     //8. Calculate the rental fee.
-    //Increase the stock, when a movie is back.
+    //9. Increase the stock, when a movie is back.
     //Finally, return the summary of the rental. 

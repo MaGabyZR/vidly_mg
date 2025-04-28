@@ -1,6 +1,7 @@
 const moment = require('moment');
 const request = require('supertest');
 const {Rental} = require('../../models/rental');
+const {Movie} = require('../../models/movie');
 const {User} = require('../../models/user'); 
 const mongoose = require('mongoose');
 
@@ -9,6 +10,7 @@ describe('/api/returns', () => {
     let customerId;
     let movieId;
     let rental;
+    let movie;
     let token;
 
     //Define a constant execute and send a request to the server. 
@@ -25,6 +27,15 @@ describe('/api/returns', () => {
         customerId = new mongoose.Types.ObjectId();
         movieId = new mongoose.Types.ObjectId();
         token = new User().generateAuthToken();
+
+        movie = new Movie({
+            _id: movieId,
+            title: '12345',
+            dailyRentalRate: 2,
+            genre: { name: '12345'},
+            numberInStock: 10
+        });
+        await movie.save();
 
         rental = new Rental({
             customer: {
@@ -119,4 +130,11 @@ describe('/api/returns', () => {
         expect(rentalInDB.rentalFee).toBe(14);                  //the movie was rented for 7 days at USD 2 daily = 14    
     });
 
+    //9. TDD
+    it('should increase the stock, when a movie is back.', async () => {
+        const res = await exec();
+
+        const movieInDB = await Movie.findById(movieId);
+        expect(movieInDB.numberInStock).toBe(movie.numberInStock + 1);                     
+    });
 });

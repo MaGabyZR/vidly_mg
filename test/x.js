@@ -9,7 +9,7 @@
     //4. Return 404 if no rental is found for this customer or movie.
     //5. Return 400 if the rental has already been processed, the customer already returned the movie.
 //Sucess scenarios:
-    //Return 200 if it is a velid request.
+    //6. Return 200 if it is a valid request.
     //Set the return date.
     //Calculate the rental fee.
     //Increase the stock, when a movie is back.

@@ -91,4 +91,11 @@ describe('/api/returns', () => {
         expect(res.status).toBe(400);
     });
 
+    //6. TDD
+    it('should return 200 if it is a valid request.', async () => {
+        const res = await exec();
+
+        expect(res.status).toBe(200);
+    });
+
 });

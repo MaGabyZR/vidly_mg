@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mongoose = require('mongoose'); //load mongoose to define the Schema.
 const Joi = require('joi'); //load de joi module, for input validation, it returns a class.
 
@@ -62,6 +63,14 @@ rentalSchema.statics.lookup = function(customerId, movieId) {
     'customer._id': customerId,
     'movie._id': movieId
   }); 
+}
+
+//add a new instance method to handle the state of the rental object.
+rentalSchema.methods.return = function() {
+  this.dateReturned = new Date();
+
+  const rentalDays = moment().diff(this.dateOut, 'days');
+  this.rentalFee = rentalDays * this.movie.dailyRentalRate;
 }
 
 const Rental = mongoose.model('Rental', rentalSchema);

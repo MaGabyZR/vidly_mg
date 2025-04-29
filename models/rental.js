@@ -55,7 +55,14 @@ const rentalSchema = new mongoose.Schema({
     type: Number,
     min: 0
   }
-})
+});
+//add a new static method to it. 
+rentalSchema.statics.lookup = function(customerId, movieId) {
+  return this.findOne({                                                   //Refactored for the static method Rental.lookup() in returns.js 
+    'customer._id': customerId,
+    'movie._id': movieId
+  }); 
+}
 
 const Rental = mongoose.model('Rental', rentalSchema);
 

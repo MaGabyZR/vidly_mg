@@ -8,14 +8,11 @@ const express = require('express'); //load the Express module.
 const router = express.Router();
 
 
-router.post('/', [auth, validate(validateReturn)], async (req, res) => {                    //You pass an array [] of middleware functions.
-    /* if (!req.body.customerId) return res.status(400).send('CustomerId not provided.');   //Replaced by Joi validation and moved into a middleware validator function to make it dynamic, in validate.js
+router.post('/', [auth, validate(validateReturn)], async (req, res) => {                                       //You pass an array [] of middleware functions.
+    /* if (!req.body.customerId) return res.status(400).send('CustomerId not provided.');                      //Replaced by Joi validation and moved into a middleware validator function to make it dynamic, in validate.js
     if (!req.body.movieId) return res.status(400).send('MovieId not provided.'); */
-    
-    const rental = await Rental.findOne({
-        'customer._id': req.body.customerId,
-        'movie._id': req.body.movieId
-    });
+    const rental = await Rental.lookup(req.body.customerId, req.body.movieId);                                //New static method on the rental.js class.
+
     if (!rental) return res.status(404).send('No rental is found for this customer or movie.');
 
     if (rental.dateReturned) return res.status(400).send('Rental has already been processed, the customer already returned the movie.');

@@ -1,14 +1,17 @@
+const Joi = require('joi');
 const moment = require('moment');
+const validate = require('../middleware/validate');
 const {Rental} = require('../models/rental');
 const {Movie} = require('../models/movie');
 const auth = require('../middleware/auth');
 const express = require('express'); //load the Express module.
 const router = express.Router();
 
-router.post('/', auth, async (req, res) => {
-    if (!req.body.customerId) return res.status(400).send('CustomerId not provided.');
-    if (!req.body.movieId) return res.status(400).send('MovieId not provided.');
 
+router.post('/', [auth, validate(validateReturn)], async (req, res) => {                    //You pass an array [] of middleware functions.
+    /* if (!req.body.customerId) return res.status(400).send('CustomerId not provided.');   //Replaced by Joi validation and moved into a middleware validator function to make it dynamic, in validate.js
+    if (!req.body.movieId) return res.status(400).send('MovieId not provided.'); */
+    
     const rental = await Rental.findOne({
         'customer._id': req.body.customerId,
         'movie._id': req.body.movieId
@@ -29,5 +32,15 @@ router.post('/', auth, async (req, res) => {
     return res.status(200).send(rental);
 });
 
+//Function to reuse validation.This is the new updated code for Joi v16.
+// The validate() method is now used directly on the schema object, rather than being called as a static method on Joi.
+function validateReturn(req) {
+    const schema = Joi.object({
+      customerId: Joi.objectId().required(),
+      movieId: Joi.objectId().required()
+    });
+  
+    return schema.validate(req); 
+  };
 
 module.exports = router; 

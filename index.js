@@ -13,7 +13,7 @@ require('/startup/prod')(app);                  //load prod.js module.
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
     winston.info(`Listening on port ${port}...`);
-    //console.log(`Listening on port ${port}...`); // Fallback in case Winston fails
+    console.log(`Listening on port ${port}...`); // Fallback in case Winston fails
 });
 
 module.exports = server; 

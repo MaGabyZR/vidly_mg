@@ -7,6 +7,7 @@ require('./startup/routes')(app);               //load the routes module and app
 require('./startup/db')();                      //load the DB.
 require('./startup/config')();                  //load the config module.
 require('./startup/validation')();              //load the validation module.
+require('/startup/prod')(app);                  //load prod.js module.
 
 //Add an environment variable, so you can listen to the port dinamically. On the terminal set PORT=5000 
 const port = process.env.PORT || 3000;
